@@ -1,0 +1,17 @@
+#!/bin/sh
+docker run \
+    -it \
+    --rm \
+    --name mda_rhodes \
+    -u $(id -u):$(id -g) \
+    --ipc=host \
+    --cap-add=sys_nice \
+    --ulimit rtprio=99  \
+    --group-add 17 \
+    --device /dev/snd \
+    -e PULSE_SERVER=unix:/tmp/pulse/native \
+    -e XDG_RUNTIME_DIR=/tmp \
+    -v $XDG_RUNTIME_DIR/pipewire-0:/tmp/pipewire-0 \
+    -v $XDG_RUNTIME_DIR/pulse:/tmp/pulse \
+    -w /app \
+    ghcr.io/andreimatveyeu/mda_rhodes:latest
