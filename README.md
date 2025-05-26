@@ -52,7 +52,7 @@ Once the container is running, two `jalv` instances will be started:
 1. `mda_rhodes`: Hosting the mdaEPiano plugin.
 2. `mda_rhodes_reverb`: Hosting a reverb plugin (likely mdaReverb or similar from the mda-lv2 suite).
 
-You will need to use a JACK patchbay (like `qjackctl` or `catia` from `jack-tools`, which is installed in the container) to connect the audio output of these plugins to your system's audio output or other JACK-aware applications.
+You will need to use a JACK patchbay (like `carla`) to connect the audio output of these plugins to your system's audio output or other JACK-aware applications.
 
 ## Configuration
 
