@@ -12,6 +12,7 @@ RUN apt-get update && \
         libgtk-3-0 \
         libsm6 \
         jack-tools \
+	jack-example-tools \
         mda-lv2 \
         jalv \
         dragonfly-reverb \
