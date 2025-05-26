@@ -1,0 +1,4 @@
+[mda_rhodes]
+left_out = ["mda_rhodes_reverb:lv2_audio_in_1"]
+right_out =  ["mda_rhodes_reverb:lv2_audio_in_2"]
+

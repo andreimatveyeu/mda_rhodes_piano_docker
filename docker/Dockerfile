@@ -3,7 +3,7 @@ FROM ubuntu:25.04
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install locales, core audio, mda-lv2, jalv,
-# GTK runtime, jack-tools
+# GTK runtime, jack-tools, jackmesh (for connecting the audio modules)
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         locales \
@@ -15,6 +15,12 @@ RUN apt-get update && \
         mda-lv2 \
         jalv \
         dragonfly-reverb \
+        libgtk2.0-dev \
+        python3 \
+        python3-pip \
+        git \
+    && pip install --break-system-packages git+https://github.com/andreimatveyeu/jackmesh.git@0.5.4 \
+    && apt-get remove -y --purge git python3-pip \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -33,4 +39,4 @@ COPY config /app/mda_rhodes
 # Command to run two instances of mda-lv2 plugin via jalv
 CMD pw-jack jalv -b 256 -n mda_rhodes -x -i -l /app/mda_rhodes/piano & \
     pw-jack jalv -b 256 -n mda_rhodes_reverb -x -i -l /app/mda_rhodes/reverb & \
-    tail -f /dev/null
+    sleep 3 && pw-jack jackmesh -l /app/mda_rhodes/connections.toml && echo "All connected" & tail -f /dev/null
