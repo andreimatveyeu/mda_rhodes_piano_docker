@@ -2,6 +2,6 @@
 docker build \
     --progress=plain \
 	--network=host \
-	-t ghcr.io/andreimatveyeu/mda_rhodes:latest \
+	-t ghcr.io/andreimatveyeu/mda_rhodes_piano:latest \
 	--build-arg GIT_COMMIT=$(git rev-parse --short HEAD) \
 	-f docker/Dockerfile .

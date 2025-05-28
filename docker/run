@@ -14,4 +14,4 @@ docker run \
     -v $XDG_RUNTIME_DIR/pipewire-0:/tmp/pipewire-0 \
     -v $XDG_RUNTIME_DIR/pulse:/tmp/pulse \
     -w /app \
-    ghcr.io/andreimatveyeu/mda_rhodes:latest
+    ghcr.io/andreimatveyeu/mda_rhodes_piano:latest
