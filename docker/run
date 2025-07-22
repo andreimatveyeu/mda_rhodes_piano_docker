@@ -1,6 +1,6 @@
 #!/bin/sh
 docker run \
-    -it \
+    -idt \
     --rm \
     --name mda_rhodes \
     -u $(id -u):$(id -g) \

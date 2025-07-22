@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'config/**'
+      - 'docker/build'
+      - 'docker/Dockerfile'
 
 jobs:
   build_and_publish:
