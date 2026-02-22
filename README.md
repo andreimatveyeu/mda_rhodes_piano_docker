@@ -27,7 +27,7 @@ To build the Docker image, navigate to the project's root directory and run the 
 ./docker/build
 ```
 
-This will create an image tagged as `ghcr.io/andreimatveyeu/mda_rhodes:latest`.
+This will create an image tagged as `ghcr.io/andreimatveyeu/mda_rhodes_piano:latest`.
 
 ## Running the Container
 
@@ -53,6 +53,47 @@ Once the container is running, two `jalv` instances will be started:
 2. `mda_rhodes_reverb`: Hosting a reverb plugin (likely mdaReverb or similar from the mda-lv2 suite).
 
 You will need to use a JACK patchbay (like `carla`) to connect the audio output of these plugins to your system's audio output or other JACK-aware applications.
+
+## Offline Rendering (MIDI to WAV)
+
+The Docker image includes offline rendering capability, allowing you to convert MIDI files to WAV audio without real-time playback. This uses [kuriborosu](https://github.com/falkTX/kuriborosu), a command-line renderer built on Carla's backend.
+
+### Usage
+
+```bash
+./docker/render input.mid output.wav
+```
+
+### Example
+
+```bash
+# Render a MIDI file to WAV
+./docker/render ~/music/song.mid ~/music/song.wav
+
+# The output will be a 48kHz 16-bit stereo WAV file
+```
+
+### How It Works
+
+The render script:
+1. Loads your MIDI file
+2. Processes it through the MDA EPiano synthesizer
+3. Applies Dragonfly Hall Reverb
+4. Outputs a WAV file (faster than real-time)
+
+### Notes
+
+- Offline rendering uses **default plugin parameters**. The custom presets used in real-time mode (`config/piano/state.ttl`, `config/reverb/state.ttl`) are not applied during offline rendering.
+- Output format: 48kHz, 16-bit, stereo WAV
+- Rendering is faster than real-time (actual speed depends on your CPU)
+
+### Advanced Usage
+
+You can specify a custom Docker image using the `MDA_RHODES_IMAGE` environment variable:
+
+```bash
+MDA_RHODES_IMAGE=my-custom-image:latest ./docker/render input.mid output.wav
+```
 
 ## Configuration
 

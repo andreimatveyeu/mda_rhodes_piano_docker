@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+# Offline MIDI-to-WAV rendering using the MDA Rhodes Piano Docker container
+# Usage: ./docker/render <input.mid> <output.wav>
+
+set -e
+
+MIDI_FILE="$1"
+OUTPUT_WAV="$2"
+
+if [ -z "$MIDI_FILE" ] || [ -z "$OUTPUT_WAV" ]; then
+    echo "Usage: ./docker/render <input.mid> <output.wav>"
+    echo ""
+    echo "Renders a MIDI file through MDA Rhodes Piano + Dragonfly Reverb"
+    echo "to produce a WAV audio file (offline, faster than realtime)."
+    echo ""
+    echo "Example:"
+    echo "  ./docker/render ~/music/song.mid ~/music/song.wav"
+    exit 1
+fi
+
+# Resolve absolute paths
+MIDI_ABS=$(realpath "$MIDI_FILE")
+OUTPUT_DIR=$(dirname "$(realpath -m "$OUTPUT_WAV")")
+OUTPUT_NAME=$(basename "$OUTPUT_WAV")
+
+if [ ! -f "$MIDI_ABS" ]; then
+    echo "Error: MIDI file not found: $MIDI_FILE"
+    exit 1
+fi
+
+# Ensure output directory exists
+mkdir -p "$OUTPUT_DIR"
+
+echo "Rendering: $MIDI_FILE -> $OUTPUT_WAV"
+
+# Use the image specified by MDA_RHODES_IMAGE env var, or default to ghcr.io
+IMAGE="${MDA_RHODES_IMAGE:-ghcr.io/andreimatveyeu/mda_rhodes_piano:latest}"
+
+docker run \
+    --rm \
+    -v "$MIDI_ABS:/input/input.mid:ro" \
+    -v "$OUTPUT_DIR:/output" \
+    "$IMAGE" \
+    /app/scripts/render.sh /input/input.mid "/output/$OUTPUT_NAME"
